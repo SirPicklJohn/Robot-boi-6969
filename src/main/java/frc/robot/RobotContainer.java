@@ -9,6 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.HalfDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+  private final XboxController m_controller = new XboxController(OIConstants.kControllerPort);
+  private final DriveSubsystem m_drive = new DriveSubsystem();
 
 
   /**
@@ -31,6 +37,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+                                                            //left joystick Y value (rotation)           Right Joystick X value (rotation)
+    m_drive.setDefaultCommand(new ArcadeDrive(() -> -m_controller.getY(GenericHID.Hand.kLeft), () -> m_controller.getX(GenericHID.Hand.kRight), m_drive)); //makes the default cmd ArcadeDrive
+
+
   }
 
   /**
@@ -40,6 +50,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(m_controller, Button.kY.value).whileHeld(new HalfDrive(m_drive)); //Assigns the button Y
   }
 
   /**

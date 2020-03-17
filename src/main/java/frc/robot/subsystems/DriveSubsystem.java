@@ -66,6 +66,14 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(MotorSpeed, MotorRotation);
 }
 
+  public void stopDrive(){
+    m_drive.stopMotor();
+  }
+
+  public void setMaxOutput(double maxOutput) {
+    m_drive.setMaxOutput(maxOutput);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

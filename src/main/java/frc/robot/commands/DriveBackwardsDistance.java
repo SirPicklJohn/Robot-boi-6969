@@ -5,25 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//make a drive BACKWARDS command (don't use absolute value cmd (Math.abs)), then upload to github
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveForwardDistance extends CommandBase {
+public class DriveBackwardsDistance extends CommandBase {
   private final DriveSubsystem m_drive;
   private final double m_distance;
   private final double m_speed;
   /**
-   * Creates a new DriveForwardDistance.
+   * Creates a new DriveBackwardsDistance.
    */
-  public DriveForwardDistance(double distance, double speed, DriveSubsystem drive) {
-    m_drive = drive;
-    m_distance = distance;
-    m_speed = speed;
+  public DriveBackwardsDistance(double distance, double speed, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drive);
+  m_drive = drive;
+  m_distance = distance; //not negative because it goes the same distance
+  m_speed = -speed; //NEGATIVE SO IT GOES BACKWARDS
+  addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
@@ -46,21 +45,8 @@ public class DriveForwardDistance extends CommandBase {
   }
 
   // Returns true when the command should end.
- @Override
+  @Override
   public boolean isFinished() {
     return Math.abs(m_drive.Avg_Distance()) >= m_distance; //returns a true or false statement, in a single line
   }
 }
-
-
-/* Give the command a distance and a speed
-drive forward at that speed for that distance.
-
-wheel diameter 6in
-circumference 6pi
-
-1 rotation = 6pi inches
-
-DONE IN CONSTANTS
-
-*/

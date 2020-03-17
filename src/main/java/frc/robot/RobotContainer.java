@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.DriveBackwardsDistance;
 import frc.robot.commands.DriveForwardDistance;
 import frc.robot.commands.HalfDrive;
 import frc.robot.subsystems.DriveSubsystem;
@@ -35,8 +36,9 @@ public class RobotContainer {
   private final SendableChooser<Command> m_autonChooser = new SendableChooser<>();
   
   //auton commands
-  private final Command m_simpleAuto = new DriveForwardDistance(25, 1, m_drive); //goes 25 inches at 100% in auto
+  private final Command m_simpleAuto = new DriveForwardDistance(25, .7, m_drive); //goes 25 inches at 100% in auto
   private final Command m_CHEEKIBREEKI = new DriveForwardDistance(200, 1, m_drive);
+  private final Command m_opBACKWARDSBOI = new DriveBackwardsDistance(35, .5, m_drive);
 
   private final ShuffleboardTab m_mainTab = Shuffleboard.getTab("-Drive Tab-");
 
@@ -50,8 +52,10 @@ public class RobotContainer {
                                                             //left joystick Y value (rotation)           Right Joystick X value (rotation)
     m_drive.setDefaultCommand(new ArcadeDrive(() -> -m_controller.getY(GenericHID.Hand.kLeft), () -> m_controller.getX(GenericHID.Hand.kRight), m_drive)); //makes the default cmd ArcadeDrive
 
+    //Chooses the autonomous commands
     m_autonChooser.setDefaultOption("Simple Drive", m_simpleAuto);
     m_autonChooser.addOption("The Auto for Gopniks", m_CHEEKIBREEKI);
+    m_autonChooser.addOption("Backwards Drive", m_opBACKWARDSBOI);
     m_mainTab.add("Autonomous Commands", m_autonChooser).withSize(2, 1).withPosition(0, 0); //use of decorators     adds the autochooser with a size of 2,1 in the upper corner
 
   }
@@ -66,6 +70,8 @@ public class RobotContainer {
     new JoystickButton(m_controller, Button.kY.value).whileHeld(new HalfDrive(m_drive)); //Assigns the button Y
   }
 
+
+  //////////AUTON////////////////
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

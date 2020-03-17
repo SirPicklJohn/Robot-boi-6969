@@ -23,6 +23,11 @@ public final class Constants {
         public static final int kFrontRightMotor = 2;
         public static final int kBackLeftMotor = 3;
         public static final int kBackRightMotor = 4;
+
+        public static final double kGearboxRatio = 10.75; //Gearbox Ratio
+        public static final double kWheelDiameter = 6; //Wheel Diameter (inches)
+        public static final double kWheelCircumference = kWheelDiameter * Math.PI; //Wheel Circumference
+        public static final double kEncoderCPR = 2048; //Ticks for one motor rotation
     }
     public static final class OIConstants {
         public static final int kControllerPort = 0;

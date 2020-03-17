@@ -21,7 +21,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_TalonFX m_rightMaster = new WPI_TalonFX(DriveConstants.kFrontRightMotor);
   private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(DriveConstants.kFrontLeftMotor);
   private final WPI_TalonFX m_rightSlave = new WPI_TalonFX(DriveConstants.kBackRightMotor);
-  private final WPI_TalonFX m_leftSlave = new WPI_TalonFX(DriveConstants.kBackRightMotor);
+  private final WPI_TalonFX m_leftSlave = new WPI_TalonFX(DriveConstants.kBackLeftMotor);
   
 
   /*DIFFERENTIAL DRIVE EXPLAINED: (par wikipedia)
@@ -34,6 +34,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public DriveSubsystem() {
     //makes sure nothing is set to any weird settings, and that they are all set to default
+  
+   
     m_rightMaster.configFactoryDefault();
     m_leftMaster.configFactoryDefault();
     m_rightSlave.configFactoryDefault();
@@ -58,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
     //The Feedback Sensor records how many times the motor moves, and gages
     m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    
 
     m_drive.setRightSideInverted(true);
   }
@@ -73,6 +76,30 @@ public class DriveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
   }
+
+
+  
+  //MEASURING DISTANCE
+//1 motor rotation = 2048 ticks on the encoder // m_rightMaster.getSelectedSensorPosition() gives us the amount of ticks
+  public double Right_Distance() {
+    return -(((m_rightMaster.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearboxRatio) * DriveConstants.kWheelCircumference);
+  }
+  public double Left_Distance() {
+    return (((m_leftMaster.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearboxRatio) * DriveConstants.kWheelCircumference);
+  }
+  //Average robot distance (inches)
+  public double Avg_Distance() {
+    return (Right_Distance() + Left_Distance()) / 2;
+  }
+
+
+
+  //Resets Encoders
+  public void resetEncoders() {
+    m_rightMaster.setSelectedSensorPosition(0);
+    m_leftMaster.setSelectedSensorPosition(0);
+  }
+
 
   @Override
   public void periodic() {
